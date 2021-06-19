@@ -1,0 +1,96 @@
+*{
+    font-family: 'Montserrat', sans-serif;
+}
+html, body {
+    margin: 0;
+}
+*:focus {
+    outline: 0;
+}
+html>body>div:first-child {
+    background-color: #d7141a;
+    display: block;
+    position: fixed;
+    top: 0;
+    width: 15%;
+    height: 100%;
+    font-family: 'Montserrat', sans-serif;
+    left: 0;
+    padding: 20px 0;
+}
+html>body>div:first-child>div:first-child>div {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 250%;
+    position: relative;
+}
+html>body>div:first-child>div:first-child {
+    display: inline-block;
+    padding: 30px 0;
+    width: 100%;
+}
+html>body>div:first-child>div+div {
+    display: inline-block;
+    margin: 0 25px;
+    width: calc(15vw - 50px);
+}
+html>body>div:first-child>div+div>div>a {
+    border-bottom: rgba(255, 255, 255, 0.5) 1px solid;
+    background-image: linear-gradient(to right, transparent, rgba(184, 13, 18, 0.1), rgba(184, 13, 18, 0.1), rgba(184, 13, 18, 0.4));
+    height: 50px;
+    width: 100%;
+    display: block;
+    cursor: pointer;
+    text-decoration: none;
+}
+html>body>div:first-child>div+div>div>a>div {
+    position: relative;
+    text-align: left;
+    top: 50%;
+    transform: translate(0, -50%);
+    color: white;
+    font-size: 115%;
+    font-weight: 500;
+}
+html>body>div:first-child>div+div>div>a+div {
+    display: none;
+}
+html>body>div:first-child>div+div>div>a:not([href])+div {
+    display: block;
+    height: 0;
+    overflow: hidden;
+    -webkit-transition: all .35s ease;
+    -moz-transition: all .35s ease;
+    -ms-transition: all .35s ease;
+    -o-transition: all .35s ease;
+    transition: all .35s ease;
+}
+html>body>div:first-child>div+div>div>a:not([href])+div>a {
+    background-image: linear-gradient(to right, transparent, transparent, transparent, rgba(184, 13, 18, 0.3));
+    border-bottom: rgba(255, 255, 255, 0.5) 1px solid;
+    height: calc((50px + 25px) / 2);
+    width: 95%;
+    margin-left: 5%;
+    display: block;
+    cursor: pointer;
+    text-decoration: none;
+}
+html>body>div:first-child>div+div>div>a:not([href])+div>a>div {
+    position: relative;
+    text-align: left;
+    top: 50%;
+    transform: translate(0, -50%);
+    color: white;
+    font-size: 95%;
+    font-weight: 500;
+}
+html>body>div:first-child+div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 15%;
+    width: 85%;
+    height: 100%;
+    background: pink;
+}
