@@ -1,9 +1,18 @@
+
+<FilesMatch "\.(?:json|lock)$">
+    #Order allow,deny
+    #Deny from all
+    RewriteEngine on
+    RewriteRule .* - [L,R=404]
+</FilesMatch>
+
 RewriteEngine on
+
+RewriteCond %{REQUEST_URI} ^/vendor/* [OR]
+RewriteCond %{REQUEST_URI} ^/db/* [OR]
+RewriteCond %{REQUEST_URI} ^/auth/$
+RewriteRule .* - [L,R=404]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^.*$ ./redirect.php [L,QSA]
-
-#RewriteCond %{REQUEST_URI} ^/.*\.(json|lock)$ [OR]
-#RewriteCond %{REQUEST_URI} ^/vendor/* [OR]
-#RewriteCond %{REQUEST_URI} ^/bot/*
-#RewriteRule .* - [F]

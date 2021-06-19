@@ -35,9 +35,7 @@ if (isset($action)) {
                     if (!(isset($db[$data['thanking']]))) $db[$data['thanking']] = ['thanked' => [], 'was_thanked' => []];
                     array_push($db[$data['thanking']]['was_thanked'], ['time' => time(), 'message' => $data['message'], 'thanked_by' => $data['thanker']]);
 
-                    $myfile = fopen("db.json", "w") or die("Unable to open file!");
-                    fwrite($myfile, json_encode($db, 128));
-                    fclose($myfile);
+                    file_get_contents("db.json", json_encode($db, 128));
 
                     echo "Data uploaded and processed";
                 }else {

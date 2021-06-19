@@ -52,10 +52,8 @@ if (isset($action)) {
                 $db[$guildID]['previousLog']['data'] = $data;
                 $db[$guildID]['previousLog']['time'] = time();
 
-                $myfile = fopen("db.json", "w") or die("Unable to open file!");
-                fwrite($myfile, json_encode($db, 128));
-                fclose($myfile);
-                
+                file_put_contents("db.json", json_encode($db, 128));
+
                 echo "Data uploaded and processed";
             }else{
                 echo "Data or GuildID are not valid";
