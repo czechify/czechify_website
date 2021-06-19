@@ -1,0 +1,75 @@
+{
+    "titleName": "Czechify",
+    "navItems": [
+        {
+            "hrefType": "relative",
+            "hrefLocation": "#/home/",
+            "label": "Home"
+        },
+        {
+            "hrefType": "absolute",
+            "hrefLocation": "https://translate.czechify.com/",
+            "label": "Translate"
+        },
+        {
+            "hrefType": "relative",
+            "hrefLocation": "#/about-us/",
+            "label": "About Us"
+        },
+        {
+            "label": "Videos",
+            "dropdownItems": [
+                {
+                    "hrefType": "relative",
+                    "hrefLocation": "#/videos/",
+                    "label": "All Videos"
+                },
+                {
+                    "hrefType": "relative",
+                    "hrefLocation": "#/videos/beginner/",
+                    "label": "Beginner"
+                },
+                {
+                    "hrefType": "relative",
+                    "hrefLocation": "#/videos/intermediate/",
+                    "label": "Intermediate"
+                },
+                {
+                    "hrefType": "relative",
+                    "hrefLocation": "#/videos/advanced/",
+                    "label": "Advanced"
+                }
+            ]
+        },
+        {
+            "label": "Flashcards",
+            "dropdownItems": [
+                {
+                    "hrefType": "relative",
+                    "hrefLocation": "#/flashcards/your-collection/",
+                    "label": "Your Collection"
+                },
+                {
+                    "hrefType": "relative",
+                    "hrefLocation": "#/flashcards/play/",
+                    "label": "Play"
+                }
+            ]
+        },
+        {
+            "label": "Account",
+            "dropdownItems": [
+                {
+                    "hrefType": "relative",
+                    "hrefLocation": "#/login/",
+                    "label": "Login"
+                },
+                {
+                    "hrefType": "relative",
+                    "hrefLocation": "#/register/",
+                    "label": "Register"
+                }
+            ]
+        }
+    ]
+}

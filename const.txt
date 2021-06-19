@@ -1,0 +1,1 @@
+Welcome to const.txt, this file is needed for the structural integrity of my website :)
