@@ -24,7 +24,7 @@ if ($navData) {
                             $ddItem['hrefLocation'] = '#/account/';
                             $ddItem['label'] = 'Settings';
                         }elseif ($ddItem['label'] == 'Register') {
-                            $ddItem['hrefLocation'] = '#/logout/';
+                            $ddItem['hrefLocation'] = 'api/logout/';
                             $ddItem['label'] = 'Logout';
                         }
                     }
@@ -70,7 +70,7 @@ $aboutUsHTML .= '</div></div>';
 
 $loginTabHTML = '<div><div>Login</div><form method="post" action="./api/login.php"><input name="username" placeholder="Username"><input type="password" name="password" placeholder="Password"><input value="Login" type="submit" required><div><input value="Login" type="submit" required><input value="Login" type="submit"><input value="Login" type="submit"><input value="Login" type="submit"></div></form></div>';
 
-$registerTabHTML = '<div><div>Register</div><form method="post" action="./api/register.php"><input name="username" placeholder="Username" required><input name="email" placeholder="Email Address" required><input type="password" name="password" placeholder="Password" required><input value="Register" type="submit"><div><a href="">Google</a><a href="">Facebook</a><a href="https://discord.com/oauth2/authorize?client_id=530470790190071810&redirect_uri=https%3A%2F%2Fauth.czechify.com%2Fdiscord%2F&response_type=code&scope=identify%20email%20connections">Discord</a><a href="https://github.com/login/oauth/authorize?client_id=c73e21ffb2966179cc7c&redirect_uri=https://auth.czechify.com/github/">GitHub</a><a href="https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=3dz162czfvysilud6zu7txk2s74pwz&redirect_uri=https://auth.czechify.com/twitch/&scope=user:read:email">Twitch</a><a href=>Twitter</a></div></form></div>';
+$registerTabHTML = '<div><div>Register</div><form method="post" action="./api/register.php"><input name="username" placeholder="Username" required><input name="email" placeholder="Email Address" required><input type="password" name="password" placeholder="Password" required><input value="Register" type="submit"><div><a href="">Google</a><a href="">Facebook</a><a href="https://discord.com/api/oauth2/authorize?client_id=530470790190071810&redirect_uri=https%3A%2F%2Fauth.czechify.com%2Fdiscord%2F&response_type=code&scope=identify%20email%20connections%20guilds">Discord</a><a href="https://github.com/login/oauth/authorize?client_id=c73e21ffb2966179cc7c&redirect_uri=https://auth.czechify.com/github/">GitHub</a><a href="https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=3dz162czfvysilud6zu7txk2s74pwz&redirect_uri=https://auth.czechify.com/twitch/&scope=user:read:email">Twitch</a><a href=>Twitter</a></div></form></div>';
 
 ?>
 <!--
@@ -90,6 +90,7 @@ $registerTabHTML = '<div><div>Register</div><form method="post" action="./api/re
 -->
 <html>
     <head>
+        <title>Home | Czechify</title>
         <link rel="stylesheet" href="https://kit-pro.fontawesome.com/releases/v5.15.1/css/pro.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="./assets/css/style.css">
@@ -118,12 +119,15 @@ $registerTabHTML = '<div><div>Register</div><form method="post" action="./api/re
     <body>
         <div><?php echo $navHTML; ?></div><div><div id="---home----tab"><?php echo $homeTabHTML ?></div><div id="---about-us----tab"><?php echo $aboutUsHTML ?></div><div id="---videos----tab"><?php echo $allVideosHTML ?></div><div id="---videos---beginner----tab"><?php echo $beginnerVideosHTML ?></div><div id="---videos---intermediate----tab"><?php echo $intermediateVideosHTML ?></div><div id="---videos---advanced----tab"><?php echo $advancedVideosHTML ?></div><div id="---flashcards---your-collection----tab">Ur flashcards</div><div id="---login----tab"><?php echo $loginTabHTML; ?></div><div id="---register----tab"><?php echo $registerTabHTML; ?></div></div><div id="postViewer"></div><script src="./assets/js/0.js"></script>
         <script>
+            function toTitleCase(str) {
+                return str.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); } );
+            }
             function menuCleanup() {
                 var els1 = document.getElementsByClassName("active");
                 for (i = 0; i < els1.length; i++) if (els1[i]) els1[i].className = "";
             }
             tabs = ['home', 'about-us', 'videos', 'videos/beginner', 'videos/intermediate', 'videos/advanced', 'flashcards/your-collection'/*, 'flashcards/play'*/, 'login', 'register'];
-            posts = <?php echo json_encode($postsData); ?>;
+            posts = <?php echo json_encode($postsData, 64|256); ?>;
             if ((location.hash)&&(document.getElementById(location.hash.split('posts')[0].substring(1).replace(/\/+/g, "---") + "-tab"))) {
                 if ((!(document.getElementById(location.hash.split('posts')[0].substring(1).replace(/\/+/g, "---") + "-nav").parentElement.offsetHeight))&&((!(document.getElementById(location.hash.split('posts')[0].substring(1).replace(/\/+/g, "---") + "-nav").parentElement.parentElement.getElementsByTagName('a')[0] == document.getElementById(location.hash.split('posts')[0].substring(1).replace(/\/+/g, "---") + "-nav")))&&(!(document.getElementById(location.hash.split('posts')[0].substring(1).replace(/\/+/g, "---") + "-nav").parentElement.parentElement.getElementsByTagName('a')[0].id)))) setTimeout(function() { document.getElementById(location.hash.split('posts')[0].substring(1).replace(/\/+/g, "---") + "-nav").parentElement.parentElement.getElementsByTagName('a')[0].click() }, 500)
                 document.getElementById(location.hash.split('posts')[0].substring(1).replace(/\/+/g, "---") + "-tab").style.display = "block";
@@ -174,6 +178,11 @@ $registerTabHTML = '<div><div>Register</div><form method="post" action="./api/re
             }
             function closePost(el, mode) {
                 document.getElementById('postViewer').style.transition = '.5s all cubic-bezier(0.48,-0.01, 0, 1)'
+                var tmp = location.hash.split('posts')[0].substring(1).replace(/\/+/g, "---");
+                while (tmp.includes('-')) tmp = tmp.replace('-', ' ');
+                tmp = tmp.trim();
+                while (tmp.includes('   ')) tmp = tmp.replace('   ', ' - ');
+                console.log(tmp)
                 document.getElementById(location.hash.split('posts')[0].substring(1).replace(/\/+/g, "---") + "-tab").parentElement.removeAttribute('style')
                 if (document.getElementById('postViewer').getAttribute('postID')) document.getElementById('postViewer').removeAttribute('postID')
                 document.getElementById('postViewer').getElementsByTagName('div')[0].style.height = '0'
@@ -187,6 +196,7 @@ $registerTabHTML = '<div><div>Register</div><form method="post" action="./api/re
                         document.getElementById('postViewer').style.width = el.getBoundingClientRect()['width'] + 'px';
                     }
                     document.getElementById('postViewer').style.opacity = 0;
+                    document.getElementsByTagName('title')[0].innerHTML = 'Home | Czechify';
                     setTimeout(function() {
                         if (document.getElementById('postViewer').getAttribute('style')) document.getElementById('postViewer').removeAttribute('style')
                     }, 500)
@@ -219,6 +229,7 @@ $registerTabHTML = '<div><div>Register</div><form method="post" action="./api/re
                         postOBJ['words'].forEach((word) => { if (word.length > longestWordLength) longestWordLength = word.length; })
                         postOBJ['words'].forEach((word) => { wordsHTML = wordsHTML + '<div style="min-width: calc(' + longestWordLength + 'ch);">' + word + '</div>'; })
                         if (postOBJ['fs']) var fsLine = ' style="font-size: ' + postOBJ['fs'] + '"'; else fsLine = '';
+                        document.getElementsByTagName('title')[0].innerHTML = postOBJ['name'] + ' - ' + postOBJ['type'] + ' | Czechify';
                         document.getElementById('postViewer').innerHTML = '<div style="height: 0;"><div><div><h1>' + postOBJ['name'] + '</h1></div><div><iframe src="https://www.youtube.com/embed/' + postOBJ['video'] + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div><div' + fsLine + '>' + wordsHTML + '</div></div><div><div><h1>' + postOBJ['text'] + '</h1></div></div></div><a href="#/videos/' + postOBJ['difficulty'] + '/" ' + postOBJ['type'].substr(0, 1) + '><div>' + postOBJ['type'] + '</div></a><a href="#' + location.hash.substring(1).split('posts')[0] + '"><div>X</div></a></div>';
                         setTimeout(function() {
                             document.getElementById('postViewer').getElementsByTagName('div')[0].style.height = '100%';

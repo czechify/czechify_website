@@ -165,6 +165,7 @@ html>body>div:first-child+div>#---about-us----tab>div>div>div>a:first-child {
     width: 6.042vw;
     height: 6.042vw;
     margin-right: 2.1875vw;
+    overflow: hidden;
 }
 html>body>div:first-child+div>#---about-us----tab>div>div>div>a:first-child>svg {
     border-radius: 50%;

@@ -1,36 +1,43 @@
 <?php
 
-$text = 'č šřěščřhello, my name is bill. ščěřěši hate my life because i have no life.';
-$p1 = str_split(preg_replace('/[^.?!;]/', '', $text));
-$p2 = array_filter(array_map('mb_ucfirst', array_map('trim', preg_split('/[.?!;]/', $text))), 'strlen');
-$f = '';
-foreach ($p2 as $k => $v) $f .= $v.$p1[$k].' ';
 $arr = array_slice(explode('/', substr(explode('?', $_SERVER['REQUEST_URI'], 2)[0], strlen(dirname($_SERVER['PHP_SELF'])))), 1, -1);
 
-$languages = json_decode(file_get_contents('./languages.json'), 1);
+$languages = [];
+$languageQuery = $mysqli->query("SELECT `base`, `target` FROM `languages`");
+if ($languageQuery) while ($language = mysqli_fetch_assoc($languageQuery)) $languages[] = $language['base'].'-'.$language['target'];
+
+$languageResolver = [];
+$languageResolverQuery = $mysqli->query("SELECT `language_code`, `text` FROM `language_meta`");
+if ($languageResolverQuery) while ($languageMeta = mysqli_fetch_assoc($languageResolverQuery)) $languageResolver[$languageMeta['language_code']] = $languageMeta['text'];
 
 $HTMLref = str_repeat('../', count($arr));
-
-$languageResolver = json_decode(file_get_contents('./language_resolver.json'), 1);
 
 $languageSelectorHTML1 = '';
 $languageSelectorHTML2 = '';
 
 $fromLanguages = [];
 $toLanguages = [];
-
 foreach ($languages as $l) {
     array_push($fromLanguages, explode('-', $l)[0]);
     array_push($toLanguages, explode('-', $l)[1]);
 }
 
-foreach (array_values(array_filter(array_unique($fromLanguages))) as $k => $fl) if (!($k)) $languageSelectorHTML1 .= '<div selected  id="lanSelector_from_'.$fl.'" onclick="changeFromLang(\''.$fl.'\')"><div>'.$languageResolver[$fl].'</div></div>'; else $languageSelectorHTML1 .= '<div id="lanSelector_from_'.$fl.'" onclick="changeFromLang(\''.$fl.'\')"><div>'.$languageResolver[$fl].'</div></div>';
+$priorityLanguages = ['EN_GB', 'CS_CZ', 'DE_DE', 'RU_RU', 'IT_IT'];
 
-foreach (array_values(array_filter(array_unique($toLanguages))) as $k => $tl) if (!($k)) $languageSelectorHTML2 .= '<div selected id="lanSelector_to_'.$tl.'" onclick="changeToLang(\''.$tl.'\')"><div>'.$languageResolver[$tl].'</div></div>'; else $languageSelectorHTML2 .= '<div id="lanSelector_to_'.$tl.'" onclick="changeToLang(\''.$tl.'\')"><div>'.$languageResolver[$tl].'</div></div>';
+foreach ($priorityLanguages as $x => $pl) {
+    $fl = $tl = $pl;
+    if (!($x)) $languageSelectorHTML1 .= '<div selected id="lanSelector_from_'.$fl.'" onclick="changeFromLang(\''.$fl.'\')"><div>'.$languageResolver[$fl].'</div></div>'; else $languageSelectorHTML1 .= '<div id="lanSelector_from_'.$fl.'" onclick="changeFromLang(\''.$fl.'\')"><div>'.$languageResolver[$fl].'</div></div>';
+    if ($x == 1) $languageSelectorHTML2 .= '<div selected id="lanSelector_to_'.$tl.'" onclick="changeToLang(\''.$tl.'\')"><div>'.$languageResolver[$tl].'</div></div>'; else $languageSelectorHTML2 .= '<div id="lanSelector_to_'.$tl.'" onclick="changeToLang(\''.$tl.'\')"><div>'.$languageResolver[$tl].'</div></div>';
+}
+
+foreach (array_values(array_filter(array_unique($fromLanguages))) as $k => $fl) if (!(in_array($fl, $priorityLanguages))) if ($k + count($priorityLanguages) < 5) if (!($k + count($priorityLanguages))) $languageSelectorHTML1 .= '<div selected id="lanSelector_from_'.$fl.'" onclick="changeFromLang(\''.$fl.'\')"><div>'.$languageResolver[$fl].'</div></div>'; else $languageSelectorHTML1 .= '<div id="lanSelector_from_'.$fl.'" onclick="changeFromLang(\''.$fl.'\')"><div>'.$languageResolver[$fl].'</div></div>';
+
+foreach (array_values(array_filter(array_unique($toLanguages))) as $k => $tl) if (!(in_array($fl, $priorityLanguages))) if ($k + count($priorityLanguages) < 5) if (!($k + count($priorityLanguages))) $languageSelectorHTML2 .= '<div selected id="lanSelector_to_'.$tl.'" onclick="changeToLang(\''.$tl.'\')"><div>'.$languageResolver[$tl].'</div></div>'; else $languageSelectorHTML2 .= '<div id="lanSelector_to_'.$tl.'" onclick="changeToLang(\''.$tl.'\')"><div>'.$languageResolver[$tl].'</div></div>';
 
 ?>
 <html>
     <head>
+        <title>Translate | Czechify</title>
         <link rel="stylesheet" href="<?php echo $HTMLref; ?>assets/css/0.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -40,7 +47,7 @@ foreach (array_values(array_filter(array_unique($toLanguages))) as $k => $tl) if
     <body>
         <div>
             <div>
-                <a href="<?php echo $HTMLref; ?>">Transalate</a>
+                <a href="<?php echo $HTMLref; ?>">Translate</a>
                 <?php if ($loggedIn) echo '<a href="'.$HTMLref.'contribute/">Contribute</a><a href="https://czechify.com/#/account/">Account</a><a href="https://czechify.com/#/logout/">Logout</a>'; else echo '<a href="https://czechify.com/#/register/">Register</a><a href="https://czechify.com/#/login/">Login</a>'; ?>
                 <a href="https://czechify.com/">Czechify</a>
             </div>
@@ -88,42 +95,33 @@ foreach (array_values(array_filter(array_unique($toLanguages))) as $k => $tl) if
         }
         supportedLanguages = <?php echo json_encode($languages); ?>;
         window.onpopstate = function() {
-            if (!((location.hash)&&(supportedLanguages.includes(location.hash.substr(1).split('/').slice(1, -1)[0])))) { location.hash = '/EN-CS/'; return; }
+            if (!((location.hash)&&(supportedLanguages.includes(location.hash.substr(1).split('/').slice(1, -1)[0])))) { location.hash = '/EN_GB-CS_CZ/'; return; }
             returnChildNodes(returnChildNodes(returnChildNodes(returnChildNodes(returnChildNodes(returnChildNodes(document.body)[1])[0])[0])[0])[0]).forEach((item) => { if (!(item.getAttribute('selected') === null)) item.removeAttribute('selected'); });
             returnChildNodes(returnChildNodes(returnChildNodes(returnChildNodes(returnChildNodes(returnChildNodes(document.body)[1])[0])[0])[1])[0]).forEach((item) => { if (!(item.getAttribute('selected') === null)) item.removeAttribute('selected'); });
             document.getElementById('lanSelector_from_' + location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0]).setAttribute('selected', '')
             document.getElementById('lanSelector_to_' + location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1]).setAttribute('selected', '')
         }
-        if (!((location.hash)&&(supportedLanguages.includes(location.hash.substr(1).split('/').slice(1, -1)[0])))) location.hash = '/EN-CS/';
+        if (!((location.hash)&&(supportedLanguages.includes(location.hash.substr(1).split('/').slice(1, -1)[0])))) location.hash = '/EN_GB-CS_CZ/';
         function tButtonHandler(e) {
             document.getElementById('translate_to').value = 'Loading...';
             translateText(document.getElementById('translate_from').value, location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0], location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1]);
         }
         function translateText(text, fromLan, toLan) {
-            $.get('./api/?language_to=' + toLan.toUpperCase() + '&language_from=' + fromLan.toUpperCase() + '&text=' + text, function(data) {
-                data = JSON.parse(data)
+            $.get('./api/?language_to=' + encodeURI(toLan.toUpperCase()) + '&language_from=' + encodeURI(fromLan.toUpperCase()) + '&text=' + encodeURI(text), function(data) {
                 document.getElementById('translate_to').value = data['text']
                 document.getElementById('translation_accuracy').innerHTML = data['accuracy']
             });
         }
         function changeLanguagePair(from, to) {
-            if (supportedLanguages.includes(from.toUpperCase() + '-' + to.toUpperCase())) location.hash = '/' + from.toUpperCase() + '-' + to.toUpperCase() + '/'; else location.hash = '/EN-CS/';
+            if (supportedLanguages.includes(from.toUpperCase() + '-' + to.toUpperCase())) location.hash = '/' + from.toUpperCase() + '-' + to.toUpperCase() + '/'; else location.hash = '/EN_GB-CS_CZ/';
         }
         function changeFromLang(changeFrom) {
-            if (!(changeFrom == location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0])) {
-                if (changeFrom == location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1]) changeLanguagePair(location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1], location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0]); else changeLanguagePair(changeFrom, location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1]);
-            }
+            if (!(changeFrom == location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0])) if (changeFrom == location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1]) changeLanguagePair(location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1], location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0]); else changeLanguagePair(changeFrom, location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1]);
         }
         function changeToLang(changeTo) {
-            if (!(changeTo == location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1])) {
-                if (changeTo == location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0]) changeLanguagePair(location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1], location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0]); else changeLanguagePair(location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0], changeTo);
-            }
+            if (!(changeTo == location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1])) if (changeTo == location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0]) changeLanguagePair(location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1], location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0]); else changeLanguagePair(location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0], changeTo);
         }
         function swapLanguages() {
-            //var v1 = returnChildNodes(returnChildNodes(returnChildNodes(returnChildNodes(document.body)[1])[0])[1])[0].value;
-            //var v2 = returnChildNodes(returnChildNodes(returnChildNodes(returnChildNodes(document.body)[1])[0])[1])[1].value;
-            //returnChildNodes(returnChildNodes(returnChildNodes(returnChildNodes(document.body)[1])[0])[1])[0].value = v2;
-            //returnChildNodes(returnChildNodes(returnChildNodes(returnChildNodes(document.body)[1])[0])[1])[1].value = v1;
             changeLanguagePair(location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[1], location.hash.substr(1).split('/').slice(1, -1)[0].split('-')[0]);
         }
     </script>

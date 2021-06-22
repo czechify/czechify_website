@@ -17,7 +17,7 @@ $postsData = json_decode(file_get_contents('./assets/json/posts.json'), 1);
 if ($arr[0] == 'posts') {
     $x = str_replace('#/posts/', '#/home/posts/', $x);
     if ((count($arr) > 1)&&(isset($postsData[$arr[1]]))) {
-        echo '<title>'.$postsData[$arr[1]]['name'].' | '.$postsData[$arr[1]]['type'].'</title>';
+        echo '<title>'.$postsData[$arr[1]]['name'].' - '.$postsData[$arr[1]]['type'].' | Czechify</title>';
         echo '<meta name="description" content="';
         foreach (explode(' ', $postsData[$arr[1]]['text']) as $k => $w) if ($k <= 16) { if ($k == 16) echo str_replace(['.', ',', '!', '?'], '', $w); else echo $w.' '; } else { echo '...'; break; }
         echo '">';
