@@ -1,0 +1,150 @@
+html>body {
+    margin: 0;
+}
+html>body>div:first-child {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #222;
+    height: 3vw;
+}
+html>body>div:first-child>div {
+    float: right;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+html>body>div:first-child>div>a {
+    text-decoration: none;
+    text-transform: uppercase;
+    color: white;
+    margin: .5vw;
+    padding: .5vw;
+    font-size: .85vw;
+}
+html>body>div:first-child+div {
+    margin-top: 3vw;
+    width: 100vw;
+}
+html>body>div:first-child+div>div {
+    margin: 2vw;
+    box-shadow: 0 .08vw .5vw 0 rgba(0, 0, 0, 0.37);
+    width: 95.84vw;
+    min-height: 30vh;
+    max-height: calc(100vh - 7.16vw);
+    border-radius: 1vw;
+    overflow: hidden;
+    display: inline-block;
+}
+html>body>div:first-child+div>div>div:first-child {
+    width: 100%;
+    height: 3vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+html>body>div:first-child+div>div>div:first-child>div:first-child {
+    width: 50%;
+    border-right: .08vw #c8c8c8 solid;
+    border-bottom: .08vw #e0e0e0 solid;
+}
+html>body>div:first-child+div>div>div:first-child>div:first-child>div {
+    float: left;
+    display: flex;
+    flex-direction: row;
+}
+html>body>div:first-child+div>div>div:first-child>div:first-child>div>div, html>body>div:first-child+div>div>div:first-child>div:first-child+div>div:first-child>div {
+    height: 1.8vw;
+    cursor: pointer;
+    transition: color 1s;
+    text-transform: uppercase;
+    color: #757575;
+    font-weight: 500;
+    font-size: 1vw;
+    padding: .5vw .7vw;
+    letter-spacing: -.02vw;
+    border-bottom: transparent .2vw solid;
+    transition: border-color .5s, border .5s;
+}
+html>body>div:first-child+div>div>div:first-child>div:first-child>div>div[selected], html>body>div:first-child+div>div>div:first-child>div:first-child+div>div:first-child>div[selected] {
+    color: #d7141a;
+    border-bottom: #d7141a .2vw solid;
+}
+html>body>div:first-child+div>div>div:first-child>div:first-child>div>div>div, html>body>div:first-child+div>div>div:first-child>div:first-child+div>div:first-child>div>div {
+    position: relative;
+    top: calc(50% + .2vw / 2);
+    transform: translate(0, -50%);
+}
+html>body>div:first-child+div>div>div:first-child>div:first-child+div {
+    width: 50%;
+    border-bottom: .08vw #e0e0e0 solid;
+    position: relative;
+}
+html>body>div:first-child+div>div>div:first-child>div:first-child+div>div:first-child {
+    float: right;
+    display: flex;
+    flex-direction: row;
+}
+html>body>div:first-child+div>div>div:first-child>div:first-child+div>div:first-child+div {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    color: #000;
+    font-size: 1vw;
+}
+html>body>div:first-child+div>div>div:first-child>div:first-child+div+div {
+    cursor: pointer;
+    position: absolute;
+    display: inline-block;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #1b1b1b;
+    border-radius: 1vw;
+    padding: .35vw .85vw;
+    color: #fff;
+    font-size: 1.2vw;
+}
+html>body>div:first-child+div>div>div:first-child+div {
+    width: 100%;
+    height: calc(100vh - 10vw);
+    display: flex;
+    flex-direction: row;
+}
+html>body>div:first-child+div>div>div:first-child+div>textarea:first-child {
+    resize: none;
+    width: calc(50% + .08vw);
+    border: 0;
+    height: 100%;
+    border-right: .08vw #c8c8c8 solid;
+    outline: 0;
+    padding: .5vw;
+    font-size: 1vw;
+}
+html>body>div:first-child+div>div>div:first-child+div>textarea:first-child+textarea {
+    resize: none;
+    width: 50%;
+    border: 0;
+    height: 100%;
+    outline: 0;
+    padding: .5vw;
+    font-size: 1vw;
+}
+html>body>div:first-child+div>div>div:first-child+div+div {
+    cursor: pointer;
+    position: absolute;
+    top: calc(50% + 3vw);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0.75vw;
+    background: white;
+    border: .08vw #c8c8c8 solid;
+    border-radius: 50%;
+}
+html>body>div:first-child+div>div>div:first-child+div+div>svg {
+    height: 2.5vw;
+    fill: #9F9F9F;
+}

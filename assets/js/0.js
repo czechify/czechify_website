@@ -1,5 +1,6 @@
 function expandElement(element, height) {
-    setTimeout(function() { returnChildNodes(element)[1].style.maxHeight = height; }, 1);
+    //console.log(element, height)
+    //setTimeout(function() { returnChildNodes(element)[1].style.maxHeight = height; }, 1);
 }
 function returnChildNodes(element) {
     var children = [];
@@ -40,15 +41,24 @@ $(document).ready(function() {
 
 function dropdownController(element) {
     var el = returnChildNodes(element.parentElement)[1];
-    var maxH = el.style.maxHeight;
     var dropdownID = Object.keys(window.dropdowns1)[Object.values(window.dropdowns1).indexOf(el.parentElement)];
     if (!(window.dropdowns2[dropdownID])) {
+        var t = el.style.height;
+        el.style.height = 'auto';
+        var maxH = el.offsetHeight;
+        el.style.height = t;
         if (window.dropdowns3[dropdownID]) {
-            el.style.height = 0;
-            setTimeout(function() { window.dropdowns3[dropdownID] = false; }, 175)
-        }else {
             el.style.height = maxH;
-            setTimeout(function() { window.dropdowns3[dropdownID] = true; }, 175)
+            setTimeout(function() {
+                el.style.height = 0;
+                setTimeout(function() { window.dropdowns3[dropdownID] = false; }, 350)
+            }, 1)
+        }else {
+            setTimeout(function() {
+                el.style.height = maxH;
+                setTimeout(function() { window.dropdowns3[dropdownID] = true; }, 350)
+                setTimeout(function() { el.style.height = 'auto'; el.style.maxHeight = 'auto'; }, 350)
+            }, 1)
         }
         window.dropdowns2[dropdownID] = true;
         setTimeout(function() { window.dropdowns2[dropdownID] = false; }, 350)

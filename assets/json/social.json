@@ -1,0 +1,44 @@
+[
+    {
+        "name": "Discord",
+        "type": "discord",
+        "url": "https://discord.gg/aTWEFfXnWJ",
+        "svg_code": "<g><circle></circle></g><g><path></path></g>",
+        "text": "Czechify"
+    },
+    {
+        "name": "YouTube",
+        "type": "youtube",
+        "url": "https://youtube.com/channel/UChlYCUWTihnOVKbop8Gosjw/",
+        "svg_code": "<g><circle></circle></g><g><path></path></g>",
+        "text": "Czechify"
+    },
+    {
+        "name": "Facebook",
+        "type": "facebook",
+        "url": "https://facebook.com/Czechify-103133338303677",
+        "svg_code": "<g><circle></circle></g><g><path></path></g>",
+        "text": "Czechify"
+    },
+    {
+        "name": "Instagram",
+        "type": "instagram",
+        "url": "https://instagram.com/Czechify/",
+        "svg_code": "<g><circle></circle></g><g><path></path><path></path><path></path></g>",
+        "text": "Czechify"
+    },
+    {
+        "name": "VK",
+        "type": "vk",
+        "url": "https://vk.com/public200576822",
+        "svg_code": "<g><circle></circle></g><g><path></path></g>",
+        "text": "Czechify"
+    },
+    {
+        "name": "Twitter",
+        "type": "twitter",
+        "url": "https://twitter.com/RealCzechify/",
+        "svg_code": "<g><circle></circle></g><g><path></path></g>",
+        "text": "Czechify"
+    }
+]
